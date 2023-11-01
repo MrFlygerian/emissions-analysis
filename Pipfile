@@ -12,6 +12,7 @@ plotly = "*"
 numpy = "*"
 notebook = "*"
 matplotlib = "*"
+openpyxl = "*"
 
 [dev-packages]
 
