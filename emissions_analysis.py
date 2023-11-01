@@ -12,8 +12,6 @@ import plotly.express as px
 from funcs import custom_groupby, files_to_dataframe, is_within_range
 import config
 
-
-
 # Constants
 input_file_names = config.INPUT_FILES
 columns_to_drop = config.COLUMNS_TO_DROP
@@ -24,8 +22,6 @@ ship_range_limits = config.SHIP_RANGE_LIMITS
 # Script
 
 st.title('Carbon Chain - Emissions Analysis')
-
-
 st.sidebar.text("""
 
 To prep this data, I did 3 things:
@@ -160,20 +156,30 @@ fig2.update_layout(height=600, width=800,
 
 st.plotly_chart(fig2)
 
-st.write(f"""
-The graph shows that CO2 intensity tends to increase with deadweight.
-This is backed by by a coefficient of determination of {r_sq:.3}.
-This is likely due to larger ships being less efficient, 
-having more powerful engines, and traveling at higher speeds.
-"""
-         
-         )
+st.write(
+    f"""
+    The graph shows that CO2 intensity tends to increase with deadweight.
+    This is backed by by a coefficient of determination of {r_sq:.3}.
+    This is likely due to larger ships being less efficient, 
+    having more powerful engines, and traveling at higher speeds.
+    """
+    )
 
 # Question 4
-st.write(filtered_data[['IMO Number', 
-                        'Ship type',
-                        'Name', 
-                        'Distance Travelled [n miles]',
-                        'Distance calculated by Co2',
-                        'Is Distance in Ship Type Range',
-                        'Percent Diff']])
+st.write(
+    filtered_data[['IMO Number', 
+                   'Ship type',
+                   'Name',
+                   'Distance Travelled [n miles]',
+                   'Distance calculated by Co2',
+                   'Is Distance in Ship Type Range',
+                   'Percent Diff']],
+    """
+The __Distance Travelled [n miles]__ was calculated using the total fuel consumed and the 
+amount of fuel consumed per unit distance (annually). This closely agrees with the __Distance calculated by Co2__,
+which was calculated using total CO2 emissions and average CO2 emissions per distance (annually). 
+This distance is not always within the typical range for the ship type, which infers it may not be 
+an exact representation of the ship's activity. The __Percent Diff__ column quantifies how 
+far outside or inside the typical range the calculated distance falls.
+"""
+)

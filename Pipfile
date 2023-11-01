@@ -10,6 +10,8 @@ pandas = "*"
 scikit-learn = "*"
 plotly = "*"
 numpy = "*"
+notebook = "*"
+matplotlib = "*"
 
 [dev-packages]
 
