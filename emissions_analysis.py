@@ -4,7 +4,6 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 
 import altair as alt
-import matplotlib.pyplot as plt
 from plotly.subplots import make_subplots
 import plotly.offline as py
 import plotly.graph_objs as go
@@ -40,10 +39,6 @@ as the latter was more populated
 
 # Loading Data
 data = files_to_dataframe(input_file_names, dropped_indexes=columns_to_drop)
-
-
-#Filtering data
-
 
 # Filtering data
 selected_periods = st.sidebar.multiselect('Select Reporting Period(s)', data['Reporting Period'].unique())
@@ -83,6 +78,8 @@ ship_type_agg = custom_groupby(filtered_data,
 
 
 # Question 1
+
+#TODO:  Turn plots into functions
 fig = px.bar(
     ship_type_agg.sort_values(by='IMO Number', 
                               ascending=False), 
@@ -96,6 +93,15 @@ fig.update_layout(height=600, width=800,
                   yaxis_title="Number of Ships")
 
 st.plotly_chart(fig)
+
+st.write('''
+
+The bulk carriers are the most common ship type, 
+followed by the oil tanker and the container ship. 
+The number of ships is unevenly distributed across the different ship types,
+ with the bulk carriers accounting for over a third of all ships.
+
+''')
 
 # Question 2
 
@@ -130,10 +136,11 @@ model.fit(X, y)
 r_sq = model.score(X, y)
 st.write(f'Coefficient of determination: {r_sq:.3}') 
 
+# Plotting data without outliers and regression of Deadweight vs 
 fig2 = px.scatter(data_less_outliers,
               x = 'Deadweight',
               y = 'Annual average CO₂ emissions per distance [kg CO₂ / n mile]',
-              title='Deadweight vs Co2 intensity',
+              title='Deadweight vs Co2 Emission Intensity',
               color="Ship type"
              )
 
@@ -145,14 +152,22 @@ fig2.add_traces(
         fill='tonext',
         opacity=0.5
     )
-        )
-
+)
 
 fig2.update_layout(height=600, width=800,
-                  xaxis_title="Deadweight",
-                  yaxis_title="CO2 Intensity")
+                  xaxis_title="Deadweight (Tonnes)",
+                  yaxis_title="Co2 Emissions per Distance Travelled (kg/n miles)")
 
 st.plotly_chart(fig2)
+
+st.write(f"""
+The graph shows that CO2 intensity tends to increase with deadweight.
+This is backed by by a coefficient of determination of {r_sq:.3}.
+This is likely due to larger ships being less efficient, 
+having more powerful engines, and traveling at higher speeds.
+"""
+         
+         )
 
 # Question 4
 st.write(filtered_data[['IMO Number', 
