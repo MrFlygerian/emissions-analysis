@@ -144,7 +144,7 @@ fig1.update_layout(height=600, width=800,
 st.plotly_chart(fig1)
 st.write("""
 Gas Carriers, Oil Tankers and Vehicle Carriers appear to emit the most
-CO₂ per unit distance. This could be due to the fact they all carry 
+CO₂ per unit distance. This could be due to the fact they all carry
 highly pollutant goods. These ships are generally large and require a lot
 of fuel to power, added to the pollutants these ships can produce.
 """)
@@ -180,8 +180,9 @@ st.plotly_chart(fig2)
 st.write("""
 Shipping industry is a major contributor to climate change,
 but CO2 emissions are decreasing. This looks to be mainly driven by
-passenger ships and LNG carriers. However, the rate of
-decrease in CO2 emissions has slowed in recent years, and has even ticked up.
+passenger ships and LNG carriers - although the dip in 2020 was mostly
+due to covid. The rate of decrease in CO2 emissions has slowed in
+recent years, and has even started ticking up.
 """)
 
 
