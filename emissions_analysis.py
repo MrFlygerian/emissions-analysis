@@ -22,13 +22,27 @@ ship_range_limits = config.SHIP_RANGE_LIMITS
 # Script
 st.title("Carbon Chain - Emissions Analysis")
 st.sidebar.text("""
-DATA PREP
+Short explainer
 
-To prep this data, I did 3 things:
+This data was cleaned. To do this I did the following:
 1. Replaced N/A and "Division by zero!" values with NaN
 2. Dropped unused columns (there were lots of them)
 3. Imputed the effieciency DWT field with the the transport by mass field,
 as the latter was more populated
+
+You can and should interact with the data using the
+legends and the Reporting Period filter. More analysis can be seen that way
+
+Calculations:
+Deadweight:
+Total fuel consumption / Annual average Fuel consumption per transport work
+
+Distance Travelled [n miles]:
+Total fuel consumption / Annual average Fuel consumption per distance
+
+Distance calculated by CO₂:
+Total CO₂ emissions [m tonnes] / Annual average CO₂ emissions per distance
+
  """
                 )
 
@@ -200,7 +214,8 @@ fig3.add_traces(
         x=X.reshape(-1),
         y=model.predict(X),
         name="Trendline",
-        fill="tonext"
+        line=dict(color='limegreen', width=4)
+
     )
 )
 

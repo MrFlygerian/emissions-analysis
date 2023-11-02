@@ -32,7 +32,8 @@ def is_distance_within_range(range_dict, ship_type, distance):
 def custom_groupby(data: pd.DataFrame,
                    groupby_column: str,
                    aggregations: dict) -> pd.DataFrame:
-    """Groups the data by the specified column and calculates the specified aggregations.
+    """Groups the data by the specified column
+    and calculates the specified aggregations.
 
     Args:
         data: A Pandas DataFrame.
@@ -60,6 +61,9 @@ def files_to_dataframe(file_list, dropped_indexes=None):
     # Light cleaning
     df = df.replace(['Division by zero!', 'Not Applicable'],  np.nan)
     df = df.drop(columns=df.columns[dropped_indexes], axis=1)
+
+    # Imputing the effiency metric using dwt with the efficiency
+    #  metric using mass as the dw metric only has a few 100 records
     df['Annual average Fuel consumption per transport work'] = df['Annual average Fuel consumption per transport work (dwt) [g / dwt carried · n miles]'].fillna(
         df['Annual average Fuel consumption per transport work (mass) [g / m tonnes · n miles]'])
     df = df.drop(columns=['Annual average Fuel consumption per transport work (dwt) [g / dwt carried · n miles]',
