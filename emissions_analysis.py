@@ -21,6 +21,19 @@ ship_range_limits = config.SHIP_RANGE_LIMITS
 
 # Script
 st.title("Carbon Chain - Emissions Analysis")
+st.subheader("Summary")
+st.write("""
+Ships are major contributors to climate change.
+Changes in passenger ship travel (covid related) 
+have decreased the CO₂ emitted in recent times. However, dealing
+with large heavy duty ships is still needed, as there's a clear
+positive correlation between how much ships emit per travel
+distance and how big they are. Ships are emitting less CO₂ than
+5 years ago, but the changes made between now and then haven't resulted
+in a constant downward trend. Recent increases higlight that more must be done.
+""")
+
+
 st.sidebar.text("""
 Short explainer
 
@@ -179,9 +192,9 @@ fig2.update_layout(height=600, width=800,
 st.plotly_chart(fig2)
 st.write("""
 Shipping industry is a major contributor to climate change,
-but CO2 emissions are decreasing. This looks to be mainly driven by
+but CO₂ emissions are decreasing. This looks to be mainly driven by
 passenger ships and LNG carriers - although the dip in 2020 was mostly
-due to covid. The rate of decrease in CO2 emissions has slowed in
+due to covid. The rate of decrease in CO₂ emissions has slowed in
 recent years, and has even started ticking up.
 """)
 
