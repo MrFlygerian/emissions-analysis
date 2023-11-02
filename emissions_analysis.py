@@ -93,6 +93,7 @@ filtered_data["Deadweight"] = (filtered_data["Total fuel consumption [m tonnes]"
                                /
                                filtered_data["Annual average Fuel consumption per transport work"]).round(2)
 
+# Creating groups to enable graph creation
 ship_type_agg = custom_groupby(filtered_data,
                                "Ship type",
                                {"IMO Number": "nunique",
@@ -110,7 +111,7 @@ ship_type_period_agg = custom_groupby(filtered_data,
                                        })
 
 
-# Question 1
+# Question 1: Number of ships by type
 
 # TODO: Turn plots into functions
 fig = px.bar(
@@ -136,8 +137,8 @@ with the bulk carriers accounting for over a third of all ships.
          )
 
 
-# Question 2
-fig1 = go.Figure()
+# Question 2: emission profile comparison
+fig1 = go.Figure()  # Graph comparing CO₂ emission intensity
 
 fig1.add_traces(
     go.Bar(
@@ -162,7 +163,7 @@ highly pollutant goods. These ships are generally large and require a lot
 of fuel to power, added to the pollutants these ships can produce.
 """)
 
-
+# Graph comparing CO₂ emission over time for different ship types
 fig2 = px.line(
     ship_type_period_agg.sort_values(by="Reporting Period"),
     x="Reporting Period",
@@ -170,18 +171,19 @@ fig2 = px.line(
     color="Ship type"
 )
 
+# Plotting overall CO₂ emission over time
 totals = custom_groupby(ship_type_period_agg,
                         'Reporting Period',
                         {'Total CO₂ emissions [m tonnes]': 'sum'}
                         )
 
 fig2.add_trace(
-  go.Scatter(
-    x=totals["Reporting Period"], 
-    y=totals["Total CO₂ emissions [m tonnes]"],
-    name="Overall",
-    line=dict(color='white', width=4)
-  )
+    go.Scatter(
+        x=totals["Reporting Period"],
+        y=totals["Total CO₂ emissions [m tonnes]"],
+        name="Overall",
+        line=dict(color='white', width=4)
+    )
 )
 
 fig2.update_layout(height=600, width=800,
@@ -199,7 +201,7 @@ recent years, and has even started ticking up.
 """)
 
 
-# Question 3
+# Question 3: relationship between Deadweight and CO₂ emission intensity
 # Removing outliers to find corrolation between deadweight and emission intensity
 data_less_outliers = filtered_data[(filtered_data["Deadweight"] < 10000000)
                                    &
@@ -214,7 +216,7 @@ model.fit(X, y)
 
 r_sq = model.score(X, y)
 
-# Plotting data without outliers and regression of Deadweight vs
+# Plotting data without outliers deadweight vs emission intensity
 fig3 = px.scatter(data_less_outliers,
                   x="Deadweight",
                   y="Annual average CO₂ emissions per distance [kg CO₂ / n mile]",
@@ -222,7 +224,7 @@ fig3 = px.scatter(data_less_outliers,
                   color="Ship type",
                   opacity=0.5
                   )
-# Add a trendline to the scatter plot
+# Add regression trendline to the scatter plot
 fig3.add_traces(
     go.Scatter(
         x=X.reshape(-1),
@@ -248,7 +250,7 @@ st.write(
     """
 )
 
-# Question 4
+# Question 4: distance travelled by each ship
 st.write(
     filtered_data[["IMO Number",
                    "Ship type",
