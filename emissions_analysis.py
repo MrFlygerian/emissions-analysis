@@ -24,7 +24,7 @@ st.title("Carbon Chain - Emissions Analysis")
 st.subheader("Summary")
 st.write("""
 Ships are major contributors to climate change.
-Changes in passenger ship travel (covid related) 
+Changes in passenger ship travel (covid related)
 have decreased the CO₂ emitted in recent times. However, dealing
 with large heavy duty ships is still needed, as there's a clear
 positive correlation between how much ships emit per travel
@@ -75,40 +75,60 @@ else:
 
 
 # Calculating custom metrics
-filtered_data["Distance Travelled [n miles]"] = (filtered_data["Total fuel consumption [m tonnes]"] * 1000
-                                                 /
-                                                 filtered_data["Annual average Fuel consumption per distance [kg / n mile]"]).round(2)
+filtered_data["Distance Travelled [n miles]"] = (
+    filtered_data["Total fuel consumption [m tonnes]"] * 1000 /
+    filtered_data["Annual average Fuel consumption per distance [kg / n mile]"]
+).round(2)
 
-filtered_data["Distance calculated by CO₂"] = (filtered_data["Total CO₂ emissions [m tonnes]"] * 1000
-                                               /
-                                               filtered_data["Annual average CO₂ emissions per distance [kg CO₂ / n mile]"]).round(2)
+filtered_data["Distance calculated by CO2"] = (
+    filtered_data["Total CO2 emissions [m tonnes]"]
+    * 1000
+    / filtered_data["Annual average CO2 emissions per distance [kg CO2 / n mile]"]
+).round(2)
 
-filtered_data["Is Distance in Ship Type Range"] = filtered_data.apply(lambda row: is_distance_within_range(
-    ship_range_limits, row["Ship type"], row["Distance Travelled [n miles]"])[0], axis=1)
+filtered_data["Is Distance in Ship Type Range"] = (
+    filtered_data.apply(
+        lambda row: is_distance_within_range(
+            ship_range_limits,
+            row["Ship type"],
+            row["Distance Travelled [n miles]"]
+        )[0],
+        axis=1)
+)
 
-filtered_data["Percent Diff"] = filtered_data.apply(lambda row: is_distance_within_range(
-    ship_range_limits, row["Ship type"], row["Distance Travelled [n miles]"])[1], axis=1)
+filtered_data["Percent Diff"] = filtered_data.apply(
+    lambda row: is_distance_within_range(
+        ship_range_limits, row["Ship type"],
+        row["Distance Travelled [n miles]"])[1],
+    axis=1)
+
 
 filtered_data["Deadweight"] = (filtered_data["Total fuel consumption [m tonnes]"]*1000
                                /
                                filtered_data["Annual average Fuel consumption per transport work"]).round(2)
 
 # Creating groups to enable graph creation
-ship_type_agg = custom_groupby(filtered_data,
-                               "Ship type",
-                               {"IMO Number": "nunique",
-                                "Total CO₂ emissions [m tonnes]": "mean",
-                                "Distance Travelled [n miles]": "mean",
-                                "Annual average CO₂ emissions per distance [kg CO₂ / n mile]": "mean",
-                                "Deadweight": "mean"
-                                })
+ship_type_agg = custom_groupby(
+    filtered_data,
+    "Ship type",
+    {
+        "IMO Number": "nunique",
+        "Total CO2 emissions [m tonnes]": "mean",
+        "Distance Travelled [n miles]": "mean",
+        "Annual average CO2 emissions per distance [kg CO2 / n mile]": "mean",
+        "Deadweight": "mean",
+    },
+)
 
-ship_type_period_agg = custom_groupby(filtered_data,
-                                      ["Ship type", "Reporting Period"],
-                                      {"IMO Number": "nunique",
-                                          "Total CO₂ emissions [m tonnes]": "mean",
-                                          "Annual average CO₂ emissions per distance [kg CO₂ / n mile]": "mean",
-                                       })
+ship_type_period_agg = custom_groupby(
+    filtered_data,
+    ["Ship type", "Reporting Period"],
+    {
+        "IMO Number": "nunique",
+        "Total CO2 emissions [m tonnes]": "mean",
+        "Annual average CO2 emissions per distance [kg CO2 / n mile]": "mean",
+    },
+)
 
 
 # Question 1: Number of ships by type
@@ -202,10 +222,12 @@ recent years, and has even started ticking up.
 
 
 # Question 3: relationship between Deadweight and CO₂ emission intensity
-# Removing outliers to find corrolation between deadweight and emission intensity
-data_less_outliers = filtered_data[(filtered_data["Deadweight"] < 10000000)
-                                   &
-                                   (filtered_data["Annual average CO₂ emissions per distance [kg CO₂ / n mile]"] < 1000)]
+# Removing outliers to find correlation between deadweight
+# and emission intensity
+data_less_outliers = filtered_data[(
+    filtered_data["Deadweight"] < 10000000)
+    &
+    (filtered_data["Annual average CO₂ emissions per distance [kg CO₂ / n mile]"] < 1000)]
 
 # Regression
 X = data_less_outliers["Deadweight"].values.reshape(-1, 1)
@@ -217,13 +239,18 @@ model.fit(X, y)
 r_sq = model.score(X, y)
 
 # Plotting data without outliers deadweight vs emission intensity
-fig3 = px.scatter(data_less_outliers,
-                  x="Deadweight",
-                  y="Annual average CO₂ emissions per distance [kg CO₂ / n mile]",
-                  title="Deadweight vs Co₂ Emission Intensity",
-                  color="Ship type",
-                  opacity=0.5
-                  )
+
+
+fig3 = px.scatter(
+    data_less_outliers,
+    x="Deadweight",
+    y="Annual average CO2 emissions per distance [kg CO2 / n mile]",
+    title="Deadweight vs Co2 Emission Intensity",
+    color="Ship type",
+    opacity=0.5,
+)
+
+
 # Add regression trendline to the scatter plot
 fig3.add_traces(
     go.Scatter(
@@ -235,9 +262,12 @@ fig3.add_traces(
     )
 )
 
-fig3.update_layout(height=600, width=800,
-                   xaxis_title="Deadweight (Tonnes)",
-                   yaxis_title="CO₂ Emissions per Distance Travelled (kg/n miles)")
+fig3.update_layout(
+    height=600,
+    width=800,
+    xaxis_title="Deadweight (Tonnes)",
+    yaxis_title="CO2 Emissions per Distance " "Travelled (kg/n miles)",
+)
 
 st.plotly_chart(fig3)
 
@@ -261,7 +291,7 @@ st.write(
                    "Percent Diff"]],
     """
 The __Distance Travelled [n miles]__ was calculated using the
-total fuel consumed and the amount of fuel consumed per unit 
+total fuel consumed and the amount of fuel consumed per unit
 distance (annually).
 This closely agrees with the __Distance calculated by CO₂__,
 which was calculated using total CO₂ emissions and
