@@ -81,8 +81,7 @@ filtered_data["Distance Travelled [n miles]"] = (
 ).round(2)
 
 filtered_data["Distance calculated by CO₂"] = (
-    filtered_data["Total CO₂ emissions [m tonnes]"]
-    * 1000
+    filtered_data["Total CO₂ emissions [m tonnes]"] * 1000
     / filtered_data["Annual average CO₂ emissions per distance [kg CO₂ / n mile]"]
 ).round(2)
 
@@ -103,9 +102,10 @@ filtered_data["Percent Diff"] = filtered_data.apply(
     axis=1)
 
 
-filtered_data["Deadweight"] = (filtered_data["Total fuel consumption [m tonnes]"]*1000
-                               /
-                               filtered_data["Annual average Fuel consumption per transport work"]).round(2)
+filtered_data["Deadweight"] = (
+    filtered_data["Total fuel consumption [m tonnes]"]*1000 /
+    filtered_data["Annual average Fuel consumption per transport work"]
+).round(2)
 
 # Creating groups to enable graph creation
 ship_type_agg = custom_groupby(
@@ -231,7 +231,10 @@ data_less_outliers = filtered_data[(
 
 # Regression
 X = data_less_outliers["Deadweight"].values.reshape(-1, 1)
-y = data_less_outliers["Annual average CO₂ emissions per distance [kg CO₂ / n mile]"].values
+y = data_less_outliers[
+    "Annual average CO₂ emissions per " "distance [kg CO₂ / n mile]"
+].values
+
 
 model = LinearRegression()
 model.fit(X, y)
