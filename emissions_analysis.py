@@ -80,10 +80,10 @@ filtered_data["Distance Travelled [n miles]"] = (
     filtered_data["Annual average Fuel consumption per distance [kg / n mile]"]
 ).round(2)
 
-filtered_data["Distance calculated by CO2"] = (
-    filtered_data["Total CO2 emissions [m tonnes]"]
+filtered_data["Distance calculated by CO₂"] = (
+    filtered_data["Total CO₂ emissions [m tonnes]"]
     * 1000
-    / filtered_data["Annual average CO2 emissions per distance [kg CO2 / n mile]"]
+    / filtered_data["Annual average CO₂ emissions per distance [kg CO₂ / n mile]"]
 ).round(2)
 
 filtered_data["Is Distance in Ship Type Range"] = (
@@ -113,9 +113,9 @@ ship_type_agg = custom_groupby(
     "Ship type",
     {
         "IMO Number": "nunique",
-        "Total CO2 emissions [m tonnes]": "mean",
+        "Total CO₂ emissions [m tonnes]": "mean",
         "Distance Travelled [n miles]": "mean",
-        "Annual average CO2 emissions per distance [kg CO2 / n mile]": "mean",
+        "Annual average CO₂ emissions per distance [kg CO₂ / n mile]": "mean",
         "Deadweight": "mean",
     },
 )
@@ -125,8 +125,8 @@ ship_type_period_agg = custom_groupby(
     ["Ship type", "Reporting Period"],
     {
         "IMO Number": "nunique",
-        "Total CO2 emissions [m tonnes]": "mean",
-        "Annual average CO2 emissions per distance [kg CO2 / n mile]": "mean",
+        "Total CO₂ emissions [m tonnes]": "mean",
+        "Annual average CO₂ emissions per distance [kg CO₂ / n mile]": "mean",
     },
 )
 
@@ -244,8 +244,8 @@ r_sq = model.score(X, y)
 fig3 = px.scatter(
     data_less_outliers,
     x="Deadweight",
-    y="Annual average CO2 emissions per distance [kg CO2 / n mile]",
-    title="Deadweight vs Co2 Emission Intensity",
+    y="Annual average CO₂ emissions per distance [kg CO₂ / n mile]",
+    title="Deadweight vs CO₂ Emission Intensity",
     color="Ship type",
     opacity=0.5,
 )
@@ -266,7 +266,7 @@ fig3.update_layout(
     height=600,
     width=800,
     xaxis_title="Deadweight (Tonnes)",
-    yaxis_title="CO2 Emissions per Distance " "Travelled (kg/n miles)",
+    yaxis_title="CO₂ Emissions per Distance " "Travelled (kg/n miles)",
 )
 
 st.plotly_chart(fig3)
